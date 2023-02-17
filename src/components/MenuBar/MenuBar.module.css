@@ -1,0 +1,24 @@
+.navbar{
+    display: flex;
+    list-style: none;
+    flex: 1;
+    margin: 0;
+    padding: 0;
+    background-color: #eee;  
+    height: 50px;
+}
+
+.navbar a{
+    padding: 15px 8px;
+    flex-basis: 250px;
+    text-decoration: none;
+    
+}
+
+
+
+.navbar a:hover{
+    background-color: #ccc;
+    cursor: pointer;
+    color: purple;
+}
