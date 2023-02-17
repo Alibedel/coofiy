@@ -1,11 +1,7 @@
 import tokenService from './tokenService';
-// const Recipe = require('../../api/models/recipe');
-// const recipesCtrl = require('../../api/controllers/recipes');
 
-// const BOOK_URL = '/api/recipes/';
-// const LOG_URL = '/api/recipeslogs';
 
-const BASE_URL = 'http://localhost:3001/api/recipes'
+const BASE_URL = '/api/recipes'
 
 
 
