@@ -38,22 +38,22 @@ Login Page : ![My Image](/static/images/Screenshot%202023-02-17%20at%206.11.18%2
 
 
 Sign-Up page:
-![My Image](/recipe-book/static/images/Screenshot%202023-02-17%20at%206.11.30%20PM.png)
+![My Image](/static/images/Screenshot%202023-02-17%20at%206.11.30%20PM.png)
 
 Index page:
-![My Image](/recipe-book/static/images/Screenshot%202023-02-17%20at%206.11.53%20PM.png)
+![My Image](/static/images/Screenshot%202023-02-17%20at%206.11.53%20PM.png)
 
 
 Create Recipes:
-![My Image](/recipe-book/static/images/Screenshot%202023-02-17%20at%206.18.03%20PM.png)
+![My Image](/static/images/Screenshot%202023-02-17%20at%206.18.03%20PM.png)
 
 
 Recipe Details:
-![My Image](/recipe-book//static/images/Screenshot%202023-02-17%20at%206.12.00%20PM.png)
+![My Image](/static/images/Screenshot%202023-02-17%20at%206.12.00%20PM.png)
 
 
 Update Recipe Details:
-![My Image](/recipe-book/static/images/Screenshot%202023-02-17%20at%206.12.05%20PM.png)
+![My Image](/static/images/Screenshot%202023-02-17%20at%206.12.05%20PM.png)
 
 
 
