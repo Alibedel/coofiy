@@ -34,7 +34,7 @@ Once a user has recipe/s in the table they can check the details about that reci
 
 ## App Images
 
-Login Page : ![My Image](/recipe-book//static/images/Screenshot%202023-02-17%20at%206.11.18%20PM.png)
+Login Page : ![My Image](/static/images/Screenshot%202023-02-17%20at%206.11.18%20PM.png)
 
 
 Sign-Up page:
