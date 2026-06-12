@@ -1,4 +1,4 @@
-const DATABASE_URL = "mongodb+srv://ali1998:Legendog98@cluster0.ovejytq.mongodb.net/recipes?retryWrites=true&w=majority"
+const DATABASE_URL = process.env.DATABASE_URL;
 const mongoose = require('mongoose');
 
 // mongoose.connect('mongodb://localhost:27017/recipes', {
