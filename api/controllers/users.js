@@ -3,7 +3,7 @@ const User = require('../models/user');
 const jwt = require('jsonwebtoken');
 const Recipe = require('../models/recipe')
 //const SECRET = process.env.SECRET;
-const SECRET = 'SEIRocks'
+const SECRET = process.env.SECRET || 'SEIRocks';
 
 module.exports = {
   signup,
