@@ -50,6 +50,6 @@
   },
   "proxy": "http://localhost:3001",
   "engines": {
-    "node": ">=18"
+    "node": "20.11.1"
   }
 }
