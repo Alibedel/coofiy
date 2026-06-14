@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Link, redirect } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import userService from '../../utils/userService';
 import Box from '@mui/material/Box';
 import TextField from '@mui/material/TextField';
@@ -17,7 +17,6 @@ class SignupForm extends Component {
   handleChange = (e) => {
     this.props.updateMessage('');
     this.setState({
-      // Using ES2015 Computed Property Names
       [e.target.name]: e.target.value
     });
   }
@@ -26,12 +25,8 @@ class SignupForm extends Component {
     e.preventDefault();
     try {
       await userService.signup(this.state);
-      // Successfully signed up - show GamePage
       this.props.setCurrentUser(userService.getUser())
-      // window.history.pushState(null, )
-      // this.props.history.push('/');
     } catch (err) {
-      // Invalid user data (probably duplicate email)
       this.props.updateMessage(err.message);
     }
   }
@@ -42,67 +37,26 @@ class SignupForm extends Component {
 
   render() {
     return (
-      <div>
-          <header className="header-footer">Sign Up</header>
+      <div className="page-narrow">
+        <div className="card">
+          <div className="brand-chip"><span role="img" aria-label="cooking">🍳</span> Cookify</div>
+          <header className="header-footer">Create your account</header>
+          <p className="auth-sub">Start saving and organizing your recipes</p>
 
-
-              <Box
-                  component="form"
-                  sx={{
-                      '& .MuiTextField-root': { m: 1, width: '25ch' },
-                  }}
-                  noValidate
-                  autoComplete="off"
-                 onSubmit= {this.handleSubmit}>
-                  <div>
-                      <TextField
-                          type="text"
-                          className="form-control"
-                          placeholder="Name"
-                          value={this.state.name}
-                          name="name"
-                          onChange={this.handleChange}
-                          defaultValue="name"
-                      />
-                      <TextField
-                          type="email"
-                          className="form-control"
-                          placeholder="Email"
-                          value={this.state.email}
-                          name="email"
-                          onChange={this.handleChange}
-                          defaultValue="email"
-                      />
-                      <TextField
-                          type="password"
-                          className="form-control"
-                          placeholder="Password"
-                          value={this.state.password}
-                          name="password"
-                          onChange={this.handleChange}
-                          defaultValue="password"
-                      />
-                      <TextField
-                          type="password"
-                          className="form-control"
-                          placeholder="Confirm Password"
-                          value={this.state.passwordConf}
-                          name="passwordConf"
-                          onChange={this.handleChange}
-                          defaultValue="password"
-                      />
-
-                      <button className="btn-signup" disabled={this.isFormInvalid()}>Sign Up</button>&nbsp;&nbsp;
-                      <Link to='/'>Cancel</Link>
-                  </div>
-              </Box>
-
-
-
-
+          <Box component="form" noValidate autoComplete="off" onSubmit={this.handleSubmit}>
+            <TextField type="text" label="Name" value={this.state.name} name="name" onChange={this.handleChange} fullWidth />
+            <TextField type="email" label="Email" value={this.state.email} name="email" onChange={this.handleChange} fullWidth />
+            <TextField type="password" label="Password" value={this.state.password} name="password" onChange={this.handleChange} fullWidth />
+            <TextField type="password" label="Confirm Password" value={this.state.passwordConf} name="passwordConf" onChange={this.handleChange} fullWidth />
+            <div className="form-actions">
+              <button className="btn-signup" disabled={this.isFormInvalid()}>Sign Up</button>
+              <Link to='/'>Cancel</Link>
+            </div>
+          </Box>
+        </div>
       </div>
-  );
-}
+    );
+  }
 }
 
 export default SignupForm;

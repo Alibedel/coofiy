@@ -1,58 +1,55 @@
 const Recipe = require('../models/recipe');
 
-
-
-
 async function index(req, res) {
-    Recipe.find({}, function (err, data) {
-        if (err) res.status(404)
-        res.status(200).json(data)
-    })
+  try {
+    const recipes = await Recipe.find({ user: req.user._id }).sort('-createdAt');
+    res.json(recipes);
+  } catch (err) {
+    res.status(500).json({ message: 'Could not fetch recipes' });
+  }
 }
 
 async function create(req, res) {
-    const recipe = new Recipe(req.body);
-    await recipe.save();
-    res.json(recipe)
+  try {
+    const recipe = await Recipe.create({ ...req.body, user: req.user._id });
+    res.status(201).json(recipe);
+  } catch (err) {
+    res.status(400).json({ message: 'Could not create recipe', error: err.message });
+  }
 }
 
-function show(req, res) {
-    Recipe.findById(req.params.id, function (err, data) {
-        if (err) res.status(404)
-        res.status(200).json(data)
-    })
-}
-
-
-
-function deleteRecipe(req, res) {
-    Recipe.findByIdAndDelete(req.params.id, function(err, recipe){
-        if(err) console.log(err);
-        res.status(200).json(recipe)
-    })
+async function show(req, res) {
+  try {
+    const recipe = await Recipe.findOne({ _id: req.params.id, user: req.user._id });
+    if (!recipe) return res.status(404).json({ message: 'Recipe not found' });
+    res.json(recipe);
+  } catch (err) {
+    res.status(400).json({ message: 'Invalid recipe id' });
+  }
 }
 
 async function update(req, res) {
-    try {
-        console.log(`update id = ${req.params.id}, body = ${JSON.stringify(req.b)}`)
-      const recipe = await Recipe.findByIdAndUpdate(req.params.id, req.body, { new: true });
-  
-      if (!recipe) {
-        return res.status(404).json({ message: "Recipe not found" });
-      }
-  
-      return res.statue(200).json(recipe);
-    } catch (err) {
-      console.log(err);
-      return res.status(500).json({ message: "Server error" });
-    }
+  try {
+    const recipe = await Recipe.findOneAndUpdate(
+      { _id: req.params.id, user: req.user._id },
+      req.body,
+      { new: true, runValidators: true }
+    );
+    if (!recipe) return res.status(404).json({ message: 'Recipe not found' });
+    res.json(recipe);
+  } catch (err) {
+    res.status(400).json({ message: 'Could not update recipe', error: err.message });
   }
-
-
-module.exports = {
-    create,
-    index,
-    show,
-    delete: deleteRecipe,
-    update
 }
+
+async function deleteRecipe(req, res) {
+  try {
+    const recipe = await Recipe.findOneAndDelete({ _id: req.params.id, user: req.user._id });
+    if (!recipe) return res.status(404).json({ message: 'Recipe not found' });
+    res.json(recipe);
+  } catch (err) {
+    res.status(400).json({ message: 'Could not delete recipe' });
+  }
+}
+
+module.exports = { create, index, show, delete: deleteRecipe, update };

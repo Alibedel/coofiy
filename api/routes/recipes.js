@@ -1,18 +1,15 @@
-var express = require('express');
-var router = express.Router();
+const express = require('express');
+const router = express.Router();
 const recipesCtrl = require('../controllers/recipes');
-const helpers = require('../config/helpers');
+const { checkAuth } = require('../config/helpers');
 
-router.get('/', recipesCtrl.index)
-router.get('/:id', recipesCtrl.show)
-router.post('/create', recipesCtrl.create)
-router.put('/:id', recipesCtrl.update)
-router.delete('/:id', recipesCtrl.delete)
+// All recipe routes require a logged-in user
+router.use(checkAuth);
 
-
-
-
-
-
+router.get('/', recipesCtrl.index);
+router.post('/create', recipesCtrl.create);
+router.get('/:id', recipesCtrl.show);
+router.put('/:id', recipesCtrl.update);
+router.delete('/:id', recipesCtrl.delete);
 
 module.exports = router;

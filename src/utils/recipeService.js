@@ -13,7 +13,9 @@ async function index() {
             'Content-type': 'application/json',
             'Authorization': 'Bearer ' + tokenService.getToken()
           }
-    }).then(res => res.json());
+    }).then(res => res.json())
+      .then(data => Array.isArray(data) ? data : [])
+      .catch(() => []);
 }
   
 async function create(recipe) {
@@ -38,14 +40,14 @@ async function create(recipe) {
 
 
 async function show(id) {
-  const response = await fetch(BASE_URL + `/${id}`,{
+  const response = await fetch(BASE_URL + `/${id}`, {
     method: 'GET',
-      headers: {
-        'Content-type': 'application/json',
-      },
+    headers: {
+      'Content-type': 'application/json',
+      'Authorization': 'Bearer ' + tokenService.getToken()
+    },
   })
   const data = await response.json()
-  console.log(data)
   return data
 }
 

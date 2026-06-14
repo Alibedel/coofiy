@@ -1,65 +1,36 @@
-
 const User = require('../models/user');
 const jwt = require('jsonwebtoken');
-const Recipe = require('../models/recipe')
-//const SECRET = process.env.SECRET;
-const SECRET = process.env.SECRET || 'SEIRocks';
 
-module.exports = {
-  signup,
-  login
-};
+const SECRET = process.env.SECRET;
+
+module.exports = { signup, login };
 
 async function signup(req, res) {
-  const user = new User(req.body);
   try {
-    await user.save();
-    const recipeBook = await createRecipeBook(user)
-    // TODO: Send back a JWT instead of the user
+    const user = await User.create(req.body);
     const token = createJWT(user);
-    res.json({ token, user, recipeBook });
+    res.status(201).json({ token, user });
   } catch (err) {
-    // Probably a duplicate email
-    res.status(400).json(err);
+    // Most likely a duplicate email or missing required field
+    res.status(400).json({ err: 'Email already taken or invalid data' });
   }
 }
 
-async function login(req, res){
+async function login(req, res) {
   try {
-      const user = await User.findOne({email : req.body.email});
-      if(!user){
-          return res.status(401).json({err : 'User Not found! '});
-      }
-      user.comparePassword(req.body.pw, (err, isMatch) => {
-          if(isMatch){
-              const token = createJWT(user);
-              res.json({token})
-          }
-          else {
-              return res.status(401).json({err: 'bad password'});
-          }
-      });
-    } catch (err) {
-      // Probably a duplicate email
-      res.status(400).json(err);
-    }
+    const user = await User.findOne({ email: req.body.email });
+    if (!user) return res.status(401).json({ err: 'User not found' });
+    user.comparePassword(req.body.pw, (err, isMatch) => {
+      if (err) return res.status(500).json({ err: 'Server error' });
+      if (!isMatch) return res.status(401).json({ err: 'Bad password' });
+      const token = createJWT(user);
+      res.json({ token });
+    });
+  } catch (err) {
+    res.status(400).json({ err: 'Login failed' });
+  }
 }
 
 function createJWT(user) {
-    return jwt.sign(
-      {user}, // data payload
-      SECRET,
-      {expiresIn: '24h'}
-    );
-}
-
-async function createRecipeBook(newUser){
-  let newRecipeBook = await new Recipe();
-  newRecipeBook.save(function(err){
-    if(err) {
-      console.log(err)
-      return ({err})
-    }
-    return (newRecipeBook)
-  })
+  return jwt.sign({ user }, SECRET, { expiresIn: '24h' });
 }

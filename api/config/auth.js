@@ -1,23 +1,17 @@
-// const jwt = require('jsonwebtoken');
-// const SECRET = process.env.SECRET;
+const jwt = require('jsonwebtoken');
+const SECRET = process.env.SECRET;
 
-// module.exports = function(req, res, next) {
-//   // Check for the token being sent in three different ways
-//   let token = req.get('Authorization') || req.query.token || req.body.token;
-//   if (token) {
-//     // Remove the 'Bearer ' if it was included in the token header
-//     token = token.replace('Bearer ', '');
-//     // Check if token is valid and not expired
-//     jwt.verify(token, SECRET, function(err, decoded) {
-//       if (err) {
-//         next(err);
-//       } else {
-//         // It's a valid token, so add user to req
-//         req.user = decoded.user;    
-//         next();
-//       }
-//     });
-//   } else {
-//     next();
-//   }
-// };
+// Decodes a Bearer token if present and attaches req.user.
+// Invalid/expired tokens are treated as anonymous; route guards (checkAuth)
+// decide whether a given route actually requires a logged-in user.
+module.exports = function (req, res, next) {
+  let token = req.get('Authorization') || req.query.token || req.body.token;
+  if (!token) return next();
+  token = token.replace('Bearer ', '');
+  jwt.verify(token, SECRET, function (err, decoded) {
+    if (err) return next();
+    req.user = decoded.user;
+    req.exp = decoded.exp;
+    next();
+  });
+};

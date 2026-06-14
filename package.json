@@ -27,7 +27,8 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "server": "node server.js",
+    "start:prod": "node server.js"
   },
   "eslintConfig": {
     "extends": [
@@ -45,7 +46,10 @@
       "last 1 chrome version",
       "last 1 firefox version",
       "last 1 safari version"
-    ],
-    "proxy": "http://localhost:3001"
+    ]
+  },
+  "proxy": "http://localhost:3001",
+  "engines": {
+    "node": ">=18"
   }
 }

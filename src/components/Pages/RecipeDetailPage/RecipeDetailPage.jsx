@@ -1,61 +1,47 @@
-
 import React, { useState, useEffect } from 'react';
 import recipeService from '../../../utils/recipeService';
 import { useParams, useNavigate } from 'react-router-dom';
 import './RecipeDetailPage.css'
 
-
 export default function DetailPage(props) {
   const [recipe, setRrecipe] = useState({});
-
-  //const { id } = props.match?.params || {};
-  const {id} = useParams()
+  const { id } = useParams()
   const navigate = useNavigate();
+
   useEffect(() => {
     const fetchData = async () => {
-    const data = await recipeService.show(id);
-    setRrecipe(data);
+      const data = await recipeService.show(id);
+      setRrecipe(data);
     };
     fetchData();
   }, [id]);
-
-
-
 
   const handleDelete = async () => {
     await recipeService.delete(id);
     const data = await recipeService.list();
     props.updateRecipeListState(data)
-    console.log('navigate recipes route')
     navigate("/recipes");
-
-    
   }
 
-  const handleUpdate = async () =>{
-    console.log('update')
-    // const updaterecipe = await recipeService.update(id);
-    // console.log(updaterecipe)
+  const handleUpdate = async () => {
     navigate(`/recipes/${recipe._id}/update`);
-    
   }
 
   return (
-    <>
-
-        <div >
-          <h1>Food's Details:</h1>
-          <div className='info' >
-
-            <h3>{recipe.name}</h3>
-            <p>Cuisine Type: {recipe.type}</p>
-            <p>Ingredients: {recipe.ingredients}</p>
-            <p>Cook Time: {recipe.cookTime} hours</p>
-          </div>
-          <button className='btn-delete' onClick={handleDelete}>DELETE</button>
-          <button className='btn-edit' onClick={handleUpdate}>EDIT</button>
+    <div className="page-narrow">
+      <div className="card detail-card">
+        <div className="detail-emoji" role="img" aria-label="dish">🍲</div>
+        <h1 className="detail-name">{recipe.name}</h1>
+        <div className="detail-rows">
+          <div className="detail-row"><span>Cuisine type</span><strong>{recipe.type}</strong></div>
+          <div className="detail-row"><span>Ingredients</span><strong>{recipe.ingredients}</strong></div>
+          <div className="detail-row"><span>Cook time</span><strong>{recipe.cookTime} hours</strong></div>
         </div>
-    
-    </>
+        <div className="detail-actions">
+          <button className="btn-edit" onClick={handleUpdate}>Edit</button>
+          <button className="btn-delete" onClick={handleDelete}>Delete</button>
+        </div>
+      </div>
+    </div>
   );
 }

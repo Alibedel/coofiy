@@ -6,7 +6,7 @@ import Box from '@mui/material/Box';
 import TextField from '@mui/material/TextField';
 
 class LoginPage extends Component {
-  
+
   constructor(props){
     super(props)
     this.state = {
@@ -14,75 +14,55 @@ class LoginPage extends Component {
       pw: ''
     };
   }
-  
 
   handleChange = (e) => {
-    // TODO: implement in an elegant way
-    //console.log(e.target.name)
     this.setState({[e.target.name]: e.target.value})
   }
 
   handleSubmit = async (e) => {
     e.preventDefault();
-    
     try {
       await userService.login(this.state);
-      //update user variable in state on successful login
       this.props.setCurrentUser(userService.getUser())
-
-      
     } catch (err) {
       console.log(err)
-      // Invalid user data (probably duplicate email)
-      //this.props.updateMessage(err.message);
     }
   }
-s
+
   render() {
     return (
-      <div>
-          <header className="header-footer">Log In</header>
+      <div className="page-narrow">
+        <div className="card LoginPage">
+          <div className="brand-chip"><span role="img" aria-label="cooking">🍳</span> Cookify</div>
+          <header className="header-footer">Welcome back</header>
+          <p className="auth-sub">Log in to your recipe collection</p>
 
-
-              <Box
-                  component="form"
-                  sx={{
-                      '& .MuiTextField-root': { m: 1, width: '25ch' },
-                  }}
-                  noValidate
-                  autoComplete="off"
-                 onSubmit= {this.handleSubmit}>
-                  <div>
-                      <TextField
-                          type="email"
-                          className="form-control"
-                          placeholder="Email"
-                          value={this.state.email}
-                          name="email"
-                          onChange={this.handleChange}
-                          defaultValue="email"
-                      />
-                      <TextField
-                          type="password"
-                          className="form-control"
-                          placeholder="Password"
-                          value={this.state.pw}
-                          name="pw"
-                          onChange={this.handleChange}
-                          defaultValue="password"
-                      />
-
-                      <button className="btn-login">Log In</button>&nbsp;&nbsp;&nbsp;
-                      <Link to='/'>Cancel</Link>
-                  </div>
-              </Box>
-
-
-
-
+          <Box component="form" noValidate autoComplete="off" onSubmit={this.handleSubmit}>
+            <TextField
+              type="email"
+              label="Email"
+              value={this.state.email}
+              name="email"
+              onChange={this.handleChange}
+              fullWidth
+            />
+            <TextField
+              type="password"
+              label="Password"
+              value={this.state.pw}
+              name="pw"
+              onChange={this.handleChange}
+              fullWidth
+            />
+            <div className="form-actions">
+              <button className="btn-login">Log In</button>
+              <Link to='/'>Cancel</Link>
+            </div>
+          </Box>
+        </div>
       </div>
-  );
-}
+    );
+  }
 }
 
 export default LoginPage;

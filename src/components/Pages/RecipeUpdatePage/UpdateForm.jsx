@@ -1,67 +1,37 @@
-import React, { Component, useCallback, useEffect, useState } from 'react';
-import { Link, redirect, Navigate } from 'react-router-dom';
+import React, { useCallback, useEffect, useState } from 'react';
+import { Link } from 'react-router-dom';
 import recipeService from '../../../utils/recipeService';
 import { useParams, useNavigate } from 'react-router-dom';
 import Box from '@mui/material/Box';
 import TextField from '@mui/material/TextField';
 import './UpdateForm.css'
-// import styles from './UpdatePage.module.css';
-// import Box from '@mui/material/Box';
-// import TextField from '@mui/material/TextField';
-// import Button from '@mui/material/Button';
-
 
 const UpdatePageForm = () => {
-  const [recipe, setRecipe] = useState({
-    name: "",
-    ingredients: "",
-    type: "",
-    cookTime: 0,
-  });
-  const {id} = useParams();
+  const [recipe, setRecipe] = useState({ name: "", ingredients: "", type: "", cookTime: 0 });
+  const { id } = useParams();
   const navigate = useNavigate();
 
   useEffect(() => {
-    console.log(`useEffect called`);
     const fetchRecipe = async () => {
-        const rec = await recipeService.show(id);
-        setRecipe(rec);
+      const rec = await recipeService.show(id);
+      setRecipe(rec);
     }
     fetchRecipe();
-  }, [])
+  }, [id])
 
   const handleChange = useCallback((e) => {
-    console.log(`handleChange name = ${e.target.name}, value = ${e.target.value}`);
-    let newRecipe = {
-        ...recipe,
-    };
+    let newRecipe = { ...recipe };
     newRecipe[e.target.name] = e.target.value;
-    // const eName = e.target.name;
-    // const eValue = e.target.value;
-    console.log(`handleChange newRecipe = ${JSON.stringify(newRecipe)}`);
     setRecipe(newRecipe);
-    // setRecipe((prevValue) => {
-    //     return (
-    //         ...prevValue,
-    //         [eName]: eValue,
-    //     );
-    // });
   }, [recipe, setRecipe]);
 
   const handleSave = async (e) => {
     e.preventDefault();
-    
     try {
-      const data = await recipeService.update(id, recipe);
-    //   this.props.updateStudentState(data)
-      //update user variable in state on successful login
-    //   this.setState({ redirect: true});
-    navigate(`/recipes/${id}`);
-      
+      await recipeService.update(id, recipe);
+      navigate(`/recipes/${id}`);
     } catch (err) {
-    //   this.props.updateMessage(err.message);
-      // Invalid user data (probably duplicate email)
-      //this.props.updateMessage(err.message);
+      console.log(err);
     }
   }
 
@@ -70,65 +40,25 @@ const UpdatePageForm = () => {
   }, [recipe]);
 
   return (
-    <div>
-        <header className="header-footer">Edit Recipe</header>
+    <div className="page-narrow">
+      <div className="card">
+        <div className="brand-chip"><span role="img" aria-label="cooking">🍳</span> Cookify</div>
+        <header className="header-footer">Edit recipe</header>
+        <p className="auth-sub">Update the details and save your changes</p>
 
-
-        <Box
-            component="form"
-            sx={{
-                '& .MuiTextField-root': { m: 1, width: '25ch' },
-            }}
-            noValidate
-            autoComplete="off"
-            onSubmit= {async (e) => await handleSave(e)}>
-            <div>
-                <TextField
-                    type="text"
-                    className="form-control"
-                    placeholder="name"
-                    value={recipe.name}
-                    name="name"
-                    onChange={handleChange}
-                    // defaultValue="Name"
-                />
-                <TextField
-                    type="text"
-                    className="form-control"
-                    placeholder="ingredients"
-                    value={recipe.ingredients}
-                    name="ingredients"
-                    onChange={handleChange}
-                    defaultValue="ingredients"
-                />
-                <TextField
-                    type="text"
-                    className="form-control"
-                    placeholder="type"
-                    value={recipe.type}
-                    name="type"
-                    onChange={handleChange}
-                    defaultValue="type"
-                />
-                <TextField
-                    type="number"
-                    className="form-control"
-                    placeholder="cook Time"
-                    value={recipe.cookTime}
-                    name="cookTime"
-                    onChange={handleChange}
-
-                />
-                
-
-                <button className="btn-editsubmit" disabled={isFormInvalid()}>Submit</button>
-                <Link to='/'>Cancel</Link>
-            </div>
+        <Box component="form" noValidate autoComplete="off" onSubmit={async (e) => await handleSave(e)}>
+          <TextField type="text" label="Name" value={recipe.name} name="name" onChange={handleChange} fullWidth />
+          <TextField type="text" label="Ingredients" value={recipe.ingredients} name="ingredients" onChange={handleChange} fullWidth />
+          <TextField type="text" label="Cuisine type" value={recipe.type} name="type" onChange={handleChange} fullWidth />
+          <TextField type="number" label="Cook time (hours)" value={recipe.cookTime} name="cookTime" onChange={handleChange} fullWidth />
+          <div className="form-actions">
+            <button className="btn-editsubmit" disabled={isFormInvalid()}>Save changes</button>
+            <Link to='/'>Cancel</Link>
+          </div>
         </Box>
+      </div>
     </div>
   );
-
 }
-
 
 export default UpdatePageForm
